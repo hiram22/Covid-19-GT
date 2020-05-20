@@ -52,7 +52,7 @@ fig1 , ax = plt.subplots(1,2,figsize=(18, 10))
 #Modifico los fonts
 
 #Opciones con: print(plt.style.available)
-plt.style.use('tableau-colorblind10')
+plt.style.use('Solarize_Light2')
 
 #Plot the data
 #Primer plot
@@ -86,7 +86,7 @@ ax[1].plot(range(len(z)), z,label='Casos Recuperados',color='g')
 
 #Nombre
 ax[1].set_title('Casos por día Covid-19 Guatemala 2020-05-19')
-ax[1].set(xlabel='Días desde el caso 1',ylabel='Casos por día')
+ax[1].set(xlabel='Días desde el caso 1 (2020-03-13)',ylabel='Casos por día')
 
 # Add a legend
 ax[1].legend(loc='upper left')
@@ -95,5 +95,5 @@ ax[1].legend(loc='upper left')
 plt.show()
 
 #Guardando el plot
-#plt.savefig('C:/Users/HRV/Desktop/Post-U/Scripts/Covid-19-GT/boom.png',bbox_inches='tight')
+plt.savefig('C:/Users/HRV/Desktop/Post-U/Scripts/Covid-19-GT/boom.png',bbox_inches='tight')
 
