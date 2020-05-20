@@ -57,14 +57,14 @@ plt.style.use('tableau-colorblind10')
 #Plot the data
 #Primer plot
 ax[0].set_ylim([0, 20])
-ax[0].semilogx(val, tmp, label='Casos Activos',color='b')
-ax[0].semilogx(val2, tmp2, label='Casos Fallecidos',color='r')
+ax[0].semilogx(val, tmp, label='Casos Activos',color='#C725E1')
+ax[0].semilogx(val2, tmp2, label='Casos Fallecidos',color='#25D8E1')
 ax[0].semilogx(val3, tmp3, label='Casos Recuperados',color='g')
 
-ax[0].semilogx((val[-1],ult),(tmp[-1],cnt),'bo--')
+ax[0].semilogx((val[-1],ult),(tmp[-1],cnt),'o--',color='#C725E1')
 ax[0].annotate('Valor actual', xy=((ult, cnt)), xytext=((ult-1800, cnt-3)),
               arrowprops=dict(facecolor='black', shrink=0.05))
-ax[0].semilogx((val2[-1],ult2),(tmp2[-1],cnt2),'ro--')
+ax[0].semilogx((val2[-1],ult2),(tmp2[-1],cnt2),'o--',color='#25D8E1')
 ax[0].semilogx((val3[-1],ult3),(tmp3[-1],cnt3),'go--')
 
 #Nombre
@@ -81,19 +81,19 @@ z = S2['Casos recuperados']
 y = S2['Casos fallecidos']
 
 ax[1].plot(range(len(x)), x,label='Casos Nuevos')
-ax[1].plot(range(len(y)), y,label='Casos Fallecidos')
-ax[1].plot(range(len(z)), z,label='Casos Recuperados')
+ax[1].plot(range(len(y)), y,label='Casos Fallecidos',color='#25D8E1')
+ax[1].plot(range(len(z)), z,label='Casos Recuperados',color='g')
 
 #Nombre
 ax[1].set_title('Casos por día Covid-19 Guatemala 2020-05-19')
 ax[1].set(xlabel='Días desde el caso 1',ylabel='Casos por día')
 
 # Add a legend
-ax[1].legend()
+ax[1].legend(loc='upper left')
 
 #Show the plot
 plt.show()
 
 #Guardando el plot
-plt.savefig('C:/Users/HRV/Desktop/Post-U/Scripts/Covid-19-GT/boom.png')
+#plt.savefig('C:/Users/HRV/Desktop/Post-U/Scripts/Covid-19-GT/boom.png',bbox_inches='tight')
 
