@@ -62,13 +62,13 @@ ax[0].semilogx(val2, tmp2, label='Casos Fallecidos',color='#25D8E1')
 ax[0].semilogx(val3, tmp3, label='Casos Recuperados',color='g')
 
 ax[0].semilogx((val[-1],ult),(tmp[-1],cnt),'o--',color='#C725E1')
-ax[0].annotate('Valor actual', xy=((ult, cnt)), xytext=((ult-1800, cnt-3)),
+ax[0].annotate('Valor actual', xy=((ult, cnt)), xytext=((ult-1800, cnt+2)),
               arrowprops=dict(facecolor='black', shrink=0.05))
 ax[0].semilogx((val2[-1],ult2),(tmp2[-1],cnt2),'o--',color='#25D8E1')
 ax[0].semilogx((val3[-1],ult3),(tmp3[-1],cnt3),'go--')
 
 #Nombre
-ax[0].set_title('Duplicación de Casos Covid-19 Guatemala 2020-05-19')
+ax[0].set_title('Duplicación de Casos Covid-19 Guatemala (2020-05-20)')
 ax[0].set(xlabel='Total de Casos',ylabel='Días')
 
 # Add a legend
@@ -85,15 +85,15 @@ ax[1].plot(range(len(y)), y,label='Casos Fallecidos',color='#25D8E1')
 ax[1].plot(range(len(z)), z,label='Casos Recuperados',color='g')
 
 #Nombre
-ax[1].set_title('Casos por día Covid-19 Guatemala 2020-05-19')
+ax[1].set_title('Casos por día Covid-19 Guatemala (2020-05-20)')
 ax[1].set(xlabel='Días desde el caso 1 (2020-03-13)',ylabel='Casos por día')
 
 # Add a legend
 ax[1].legend(loc='upper left')
 
 #Show the plot
-plt.show()
+#plt.show()
 
 #Guardando el plot
-plt.savefig('C:/Users/HRV/Desktop/Post-U/Scripts/Covid-19-GT/boom.png',bbox_inches='tight')
+plt.savefig('C:/Users/HRV/Desktop/Post-U/Scripts/Covid-19-GT/boom.png')
 
