@@ -9,11 +9,18 @@ Created on Tue May 19 11:08:03 2020
 import pandas as pd
 from pandas import ExcelFile
 import matplotlib.pyplot as plt
+from rich import print
+from rich.console import Console
+from rich.progress import track
+    
+
+#Consola para imprimir mensajes en pantalla. 
+console = Console()
+console.print()
 
 #   Datos descargados de:
 #   https://www.mspas.gob.gt/index.php/noticias/covid-19/casos
 df = pd.ExcelFile('infocovid19.xlsx')
-
 
 #   Funcion para generar el tiempo que a pasado para duplicar los casos
 def DuplicaC(List, Vo):
@@ -32,8 +39,8 @@ def DuplicaC(List, Vo):
     tiempo = [0]
     contador = 0
     longl = len(List)
-        
-    for i in range(longl):
+    
+    for i in track(range(longl)):
         ultimo =  2*casos[-1]
         if(List[i]>=ultimo):
             tiempo.append((contador))
@@ -41,20 +48,49 @@ def DuplicaC(List, Vo):
             contador = 0
         else:
             if(List[i]!=0):    contador=contador+1
-            
-    print('Siguiente valor: '+str(ultimo)+'. Días hasta el momento: '+str(contador))
+        i
+    #Print fancy en consola en caso de no ver gráficas.
+    #Es una forma rápida de saber los últimos
+    console.print()
+    console.print('Siguiente valor: '+str(ultimo)+'. Días hasta el momento: '+str(contador)+'.')
+    style ,style2= 'yellow','magenta'
+    console.print('Valor actual: [bold '+style+']'+str(List[len(List)-1])+'[/bold '+style+'].')
+    console.print('Último tiempo de duplicación: [bold '+style2+']'+str(tiempo[len(tiempo)-1])+'[/bold '+style2+'].')
+    console.print('*-------------------------------------------------*')
+    console.print()
+    
     return casos,tiempo,ultimo,contador
+    
+
+# Función para obtener los casos diarios Regionales
+def DiarioR(Lista):
+        # ----------
+    # Entradas:
+    # Lista      = Lista con la cantidad de casos Regionales
+    # ----------
+    # Salidas:
+    # NuevaLista = Lista con el número de casos por día
+    # ----------
+    NuevaLista = []
+    for i in range(1,len(Lista)):
+        val = Lista[i]-Lista[i-1]
+        NuevaLista.append(val)
+        
+    return NuevaLista
     
 #Obtenemos última fecha registrada
 S2 = df.parse('Casos por día')
 f = S2['Fecha']
+
+#Ajuste para que se muestre en formado dd:mm:yy
 fecha = str(f[len(f)-1])
 fecha = fecha[:10]
 fecha = fecha[8:10]+fecha[4:8]+fecha[:4]
-#Creacion del plot
+
+#Creacion del plot 1. 
 fig1 , ax = plt.subplots(1,2,figsize=(14, 5))
 
-#Modifico los fonts
+#Modifico los fonts del plot
 #Opciones con: print(plt.style.available)
 plt.style.use('bmh')
 
@@ -66,8 +102,11 @@ x = S1['Casos recuperados']
 y = S1['Casos activos']
 z = S1['Casos fallecidos']
 
+console.print('Casos Activos >>>', style="bold Blue")
 val , tmp,  ult,  cnt   = DuplicaC(y,1)
+console.print('Casos Fallecidos >>>', style="bold Red")
 val2, tmp2, ult2, cnt2  = DuplicaC(z,2)
+console.print('Casos Recuperados >>>', style="bold Green")
 val3, tmp3, ult3, cnt3  = DuplicaC(x,4)
 
 #ax[0].set_ylim([0, 20])
@@ -108,12 +147,15 @@ ax[0].legend(loc='upper left')
 #Guardando el plot
 #plt.savefig('C:/Users/HRV/Desktop/Post-U/Scripts/Covid-19-GT/boom.png')
 
-fig2 , ax2 = plt.subplots(1,1,figsize=(8, 8))
 
-#Tercer plot
+#Segundo plot
+fig2 , ax2 = plt.subplots(1,2,figsize=(14, 5))
+
+#Plot A
 df2 = pd.ExcelFile('Myinfocovid19.xlsx')
 S2 = df2.parse('Casos por región')
 
+#Data
 r1 = S2['Region 1']
 r2 = S2['Region 2']
 r3 = S2['Region 3']
@@ -122,20 +164,66 @@ r5 = S2['Region 5']
 f2 = S2['Fecha']
 f = range(len(f2))
 
-
-ax2.semilogy(f, r1,label='Región 1',color = '#FB1D07')
-ax2.semilogy(f, r2,label='Región 2',color = '#0A9B11')
-ax2.semilogy(f, r3,label='Región 3',color = '#15378F')
-ax2.semilogy(f, r4,label='Región 4',color = '#8D2294')
-ax2.semilogy(f, r5,label='Región 5',color = '#07E0D6')
+ax2[0].semilogy(f, r1,label='Región 1',color = '#FB1D07')
+ax2[0].semilogy(f, r2,label='Región 2',color = '#0A9B11')
+ax2[0].semilogy(f, r3,label='Región 3',color = '#15378F')
+ax2[0].semilogy(f, r4,label='Región 4',color = '#8D2294')
+ax2[0].semilogy(f, r5,label='Región 5',color = 'yellow')
 
 #Nombre
-ax2.set_title('Total de casos por región')
-ax2.set(ylabel='Cantidad de Casos',xlabel='Días a partir del 13-04-2020 ')        
+ax2[0].set_title('Total de casos por región')
+ax2[0].set(ylabel='Cantidad de Casos',xlabel='Días a partir del 13-04-2020 ') 
+
+#Limito el número de valores que se muesttran en el eje y       
 plt.locator_params(axis='y', numticks=4)
 
 # Add a legend
-ax2.legend()
+ax2[0].legend()
+
+#Plot B
+R1D = DiarioR(r1)
+R2D = DiarioR(r2)
+R3D = DiarioR(r3)
+R4D = DiarioR(r4)
+R5D = DiarioR(r5)
+
+ax2[1].plot(range(len(R1D)),R1D,label='Región 1',color = '#FB1D07')
+ax2[1].plot(range(len(R2D)),R2D,label='Región 2',color = '#0A9B11')
+ax2[1].plot(range(len(R3D)),R3D,label='Región 3',color = '#15378F')
+ax2[1].plot(range(len(R4D)),R4D,label='Región 4',color = '#8D2294')
+ax2[1].plot(range(len(R5D)),R5D,label='Región 5',color = 'yellow')
+
+#Nombre
+ax2[1].set_title('Casos por día por región')
+ax2[1].set(ylabel='Cantidad de Casos',xlabel='Días a partir del 14-04-2020 ') 
+
+# Add a legend
+ax2[1].legend()
+
+#Tercer Plot
+fig3 , ax3 = plt.subplots(1,1,figsize=(10, 10))
+
+#Leemos los datos
+S1 = df.parse('evolución de casos')
+f3 = S1['Fecha']
+x = S1['Casos recuperados']
+y = S1['Casos activos']
+z = S1['Casos fallecidos']
+
+#Ploteamos en escala normal y logy
+ax3.plot(range(len(y)), y,label='Casos Activos',color = '#15378F')
+#ax3[1].semilogy(range(len(y)), y,label='Casos Activos',color = '')
+ax3.plot(range(len(x)), x,label='Casos Recuperados',color = '#07E0D6')
+#ax3[1].semilogy(range(len(x)), x,label='Casos Recuperados',color = '#07E0D6')
+ax3.plot(range(len(z)), z,label='Casos Fallecidos',color = '#FB1D07')
+#ax3[1].semilogy(range(len(z)), z,label='Casos Fallecidos',color = '#FB1D07')
+
+#Lables
+ax3.set_title('Casos acumulados Covid-19 Guatemala ('+fecha+')')
+ax3.set(xlabel='Días desde el caso 1 (13-03-2020)',ylabel='Casos')
+
+# Add a legend
+ax3.legend()
 
 #Show the plot
 plt.show()
