@@ -12,8 +12,9 @@ import matplotlib.pyplot as plt
 from rich import print
 from rich.console import Console
 from rich.progress import track
+from openpyxl import load_workbook
+from openpyxl import Workbook
     
-
 #Consola para imprimir mensajes en pantalla. 
 console = Console()
 console.print()
@@ -79,8 +80,50 @@ def DiarioR(Lista):
     return NuevaLista
     
 #Obtenemos última fecha registrada
-S2 = df.parse('Casos por día')
-f = S2['Fecha']
+df0 = pd.ExcelFile('Myinfocovid19.xlsx')
+S0 = df0.parse('Casos por región')
+f2 = S0['Fecha']
+
+#Obtenemos la última fecha de nuestros datos locales
+SL = df.parse('Casos por día')
+f = SL['Fecha']
+
+if(f2[len(f2)-1]==f[len(f)-1]):
+    print("Actualizado")
+else:
+    print('No Actualizado')
+    fechaN = f[len(f)-1]
+
+    CR = df.parse('Casos por región')
+    R1 = CR.columns[2]
+    R2 = CR[R1][0]
+    R3 = CR[R1][1]
+    R4 = CR[R1][2]
+    R5 = CR[R1][3]
+    RT = R1+R2+R3+R4+R5
+    newRow = (fechaN,R1,R2,R3,R4,R5,RT)
+    dfn = pd.DataFrame(newRow)
+    dfn = dfn.transpose()
+    #dfn.to_excel('Myinfocovid19.xlsx',sheet_name='Casos por región')
+
+    wb = load_workbook(filename = 'Myinfocovid19.xlsx', read_only=False)
+    #Get the current Active Sheet
+    ws = wb.active
+    #Columna a escribir
+    COL = len(S0)+2
+    
+    print(COL)
+    
+    #Escribimos nuevos valores
+    ws.cell(COL,1,value = fechaN)
+    ws.cell(COL,2,value = R1)
+    ws.cell(COL,3,value = R2)
+    ws.cell(COL,4,value = R3)
+    ws.cell(COL,5,value = R4)
+    ws.cell(COL,6,value = R5)
+    ws.cell(COL,7,value = RT)
+    print("Intentando Guardar")
+    wb.save(filename = 'Myinfocovid19.xlsx')
 
 #Ajuste para que se muestre en formado dd:mm:yy
 fecha = str(f[len(f)-1])
@@ -127,6 +170,9 @@ ax[1].set(xlabel='Total de Casos',ylabel='Días')
 # Add a legend
 ax[1].legend()
 
+#Datos
+df = pd.ExcelFile('infocovid19.xlsx')
+S2 = df.parse('Casos por día')
 #Segundo plot
 x = S2['Casos por día']
 z = S2['Casos recuperados']
@@ -162,20 +208,20 @@ r3 = S2['Region 3']
 r4 = S2['Region 4']
 r5 = S2['Region 5']
 f2 = S2['Fecha']
-f = range(len(f2))
+f_i = range(len(f2))
 
-ax2[0].semilogy(f, r1,label='Región 1',color = '#FB1D07')
-ax2[0].semilogy(f, r2,label='Región 2',color = '#0A9B11')
-ax2[0].semilogy(f, r3,label='Región 3',color = '#15378F')
-ax2[0].semilogy(f, r4,label='Región 4',color = '#8D2294')
-ax2[0].semilogy(f, r5,label='Región 5',color = 'yellow')
+ax2[0].semilogy(f_i, r1,label='Región 1',color = '#FB1D07')
+ax2[0].semilogy(f_i, r2,label='Región 2',color = '#0A9B11')
+ax2[0].semilogy(f_i, r3,label='Región 3',color = '#15378F')
+ax2[0].semilogy(f_i, r4,label='Región 4',color = '#8D2294')
+ax2[0].semilogy(f_i, r5,label='Región 5',color = 'yellow')
 
 #Nombre
 ax2[0].set_title('Total de casos por región')
 ax2[0].set(ylabel='Cantidad de Casos',xlabel='Días a partir del 13-04-2020 ') 
 
 #Limito el número de valores que se muesttran en el eje y       
-plt.locator_params(axis='y', numticks=4)
+plt.locator_params(axis='y', nbins=4)
 
 # Add a legend
 ax2[0].legend()
