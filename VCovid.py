@@ -108,7 +108,7 @@ else:
 
     wb = load_workbook(filename = 'Myinfocovid19.xlsx', read_only=False)
     #Get the current Active Sheet
-    ws = wb.active
+    ws = wb['Casos por región']
     #Columna a escribir
     COL = len(S0)+2
     
