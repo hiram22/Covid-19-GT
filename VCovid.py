@@ -95,16 +95,12 @@ else:
     fechaN = f[len(f)-1]
 
     CR = df.parse('Casos por región')
-    R1 = CR.columns[2]
+    R1 = CR.columns[1]
     R2 = CR[R1][0]
     R3 = CR[R1][1]
     R4 = CR[R1][2]
     R5 = CR[R1][3]
     RT = R1+R2+R3+R4+R5
-    newRow = (fechaN,R1,R2,R3,R4,R5,RT)
-    dfn = pd.DataFrame(newRow)
-    dfn = dfn.transpose()
-    #dfn.to_excel('Myinfocovid19.xlsx',sheet_name='Casos por región')
 
     wb = load_workbook(filename = 'Myinfocovid19.xlsx', read_only=False)
     #Get the current Active Sheet
@@ -124,6 +120,29 @@ else:
     ws.cell(COL,7,value = RT)
     print("Intentando Guardar")
     wb.save(filename = 'Myinfocovid19.xlsx')
+    
+    #Nuevos valores por departamento    
+    SL2 = df.parse('Detalle por departamento')
+    
+    V1 = SL2.columns[1]
+    DatsO = SL2[V1]
+    Dats = []
+    Dats.append(fechaN)
+    Dats.append(V1)
+    for i in range(len(DatsO)):    Dats.append(DatsO[i])
+    
+    #Volvemos a cargar nuestro archivo
+    wb = load_workbook(filename = 'Myinfocovid19.xlsx', read_only=False)
+    ws = wb['Casos por Departamento']
+    
+    S0 = df0.parse('Casos por Departamento')
+    #Columna a escribir
+    COL = len(S0)+2    
+    for i in range(len(Dats)):
+        ws.cell(COL,i+1,value = Dats[i])
+    print("Intentando Guardar 2")
+    wb.save(filename = 'Myinfocovid19.xlsx')
+    
 
 #Ajuste para que se muestre en formado dd:mm:yy
 fecha = str(f[len(f)-1])
