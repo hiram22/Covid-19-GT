@@ -41,14 +41,14 @@ XP = []
 for i in range(len(Y1)):
     a = Y1[i]+Y2[i]
     if(a!= 0):
-        YP1.append(Y1[i]/a)
-        YP2.append(1-(Y1[i]/a))
+        YP1.append(100*Y1[i]/a)
+        YP2.append(100*(1-(Y1[i]/a)))
         XP.append(i)
       
 YP = (YP1,YP2)  
 #Letalidad de casos cerrados
-prom = max(Y1)/(max(Y1)+max(Y2))
-labelProm = 'Promedio ('+str(round(prom,2))+')'
+prom = 100*max(Y1)/(max(Y1)+max(Y2))
+labelProm = 'Promedio ('+str(round(prom,2))+'%)'
 
 fig2 , ax = plt.subplots(1,1,figsize=(14, 5))
 # create your palette
@@ -63,5 +63,6 @@ ax.set(ylabel='Porcentaje',xlabel='Días desde el caso 1')
 
 plt.show()
  
-      
-      
+#Con los casos no confirmados
+prom2 = 100*(max(Y1)+50)/(max(Y1)+max(Y2)+50)
+print(prom2) 
