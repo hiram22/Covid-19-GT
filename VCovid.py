@@ -95,11 +95,11 @@ else:
     fechaN = f[len(f)-1]
 
     CR = df.parse('Casos por región')
-    R1 = CR.columns[1]
-    R2 = CR[R1][0]
-    R3 = CR[R1][1]
-    R4 = CR[R1][2]
-    R5 = CR[R1][3]
+    R1 = float(CR.columns[2])
+    R2 = float(CR[R1][0])
+    R3 = float(CR[R1][1])
+    R4 = float(CR[R1][2])
+    R5 = float(CR[R1][3])
     RT = R1+R2+R3+R4+R5
 
     wb = load_workbook(filename = 'Myinfocovid19.xlsx', read_only=False)
