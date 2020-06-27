@@ -161,10 +161,10 @@ plt.style.use('bmh')
 S1 = df.parse('evolución de casos')
 
 x = S1['Casos recuperados']
-y = S1['Casos activos']
+y = S1['Total de casos']
 z = S1['Casos fallecidos']
 
-console.print('Casos Activos >>>', style="bold Blue")
+console.print('Casos Confirmados >>>', style="bold Blue")
 val , tmp,  ult,  cnt   = DuplicaC(y,1)
 console.print('Casos Fallecidos >>>', style="bold Red")
 val2, tmp2, ult2, cnt2  = DuplicaC(z,2)
@@ -172,7 +172,7 @@ console.print('Casos Recuperados >>>', style="bold Green")
 val3, tmp3, ult3, cnt3  = DuplicaC(x,4)
 
 #ax[0].set_ylim([0, 20])
-ax[1].semilogx(val, tmp, label='Casos Activos',color='#C725E1')
+ax[1].semilogx(val, tmp, label='Casos Confirmados',color='#C725E1')
 ax[1].semilogx(val2, tmp2, label='Casos Fallecidos',color='#25D8E1')
 ax[1].semilogx(val3, tmp3, label='Casos Recuperados',color='g')
 
@@ -198,7 +198,7 @@ z = S2['Casos recuperados']
 y = S2['Casos fallecidos']
 
 
-ax[0].plot(range(len(x)), x,label='Casos Nuevos')
+ax[0].plot(range(len(x)), x,label='Casos Confirmados')
 ax[0].plot(range(len(y)), y,label='Casos Fallecidos',color='#25D8E1')
 ax[0].plot(range(len(z)), z,label='Casos Recuperados',color='g')
 
