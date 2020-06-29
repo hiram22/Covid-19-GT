@@ -53,7 +53,7 @@ labelProm = 'Promedio ('+str(round(prom,2))+'%)'
 fig2 , ax = plt.subplots(1,1,figsize=(14, 5))
 # create your palette
 pal = ["#9b59b6", "#e74c3c", "#34495e", "#2ecc71"]
-plt.stackplot(XP,YP, labels=['Casos Fallecidos','Casos recuperados'], colors=pal, alpha=0.4 )
+plt.stackplot(XP,YP1, labels=['Casos Fallecidos','Casos recuperados'], colors=pal, alpha=0.4 )
 plt.hlines(prom,min(XP),max(XP), colors='k', linestyles='dashdot', label=labelProm )
 plt.legend(loc='upper left')
 
